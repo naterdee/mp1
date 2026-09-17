@@ -1,0 +1,98 @@
+html, body {
+margin: 0;
+padding: 0;
+scroll-behavior: smooth;
+}
+.home {
+background-color:white;
+}
+
+/*Document sections*/
+.top {
+padding:10px;
+background-color:rgb(95, 228, 219);
+color:white;
+font-size:20px;
+padding-bottom:10%;
+margin-top:80px;
+scroll-margin-top: 80px; 
+}
+.projects {
+padding:20px;
+background-color:gray;
+color:white;
+font-size:20px;
+padding-bottom:10%;
+margin-top:40px;
+scroll-margin-top: 80px; 
+}
+.contact {
+padding:20px;
+background-color:rgb(99, 97, 97);
+color:white;
+font-size:20px;
+padding-bottom:10%;
+margin-top:40px;
+scroll-margin-top: 80px; 
+}
+.footer {
+height: 150px;
+}
+
+/*Navbar CSS*/
+.navbar {
+overflow: hidden;
+display:flex;
+background-color: #5d5d5d;
+position: fixed;
+justify-content: space-between;
+top: 0;
+height:80px;
+width: 100%;
+transition: height 0.3s ease, background-color 0.3s ease;
+}
+/*Navbar is split into halves to create left and right sides*/
+.leftnav {
+display: flex;
+align-items: center;
+gap: 12px;
+}
+.rightnav {
+display: flex;
+align-items: center;
+justify-content: right;
+gap: 12px;
+}
+.navbar a.name {
+margin-left:30px;
+display: flex;
+align-items: center;
+justify-content: center;
+color: #f2f2f2;
+text-align: middle;
+font-size:35px;
+}
+.navbar a.buttons {
+align-items: center;
+vertical-align: middle;
+justify-content: right;
+display: flex;
+color: #f2f2f2;
+text-align: middle;
+padding: 15px;
+margin-right:15px;
+font-size:30px;
+text-decoration: none;
+border-radius:5px;
+}
+
+/*Navbar item CSS for JS editing*/
+.navbar a.buttons:hover {
+background: #ddd;
+color: black;
+border-radius:5px;
+}
+.navbar a.buttons.active {
+background: #0b0b0b;
+color: white;
+}
