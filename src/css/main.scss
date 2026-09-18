@@ -1,3 +1,4 @@
+/* Your SCSS here. */
 html, body {
 margin: 0;
 padding: 0;
@@ -49,7 +50,7 @@ justify-content: space-between;
 top: 0;
 height:80px;
 width: 100%;
-transition: height 0.3s ease, background-color 0.3s ease;
+transition: 0.4s;
 }
 /*Navbar is split into halves to create left and right sides*/
 .leftnav {
@@ -95,4 +96,4 @@ border-radius:5px;
 .navbar a.buttons.active {
 background: #0b0b0b;
 color: white;
-}/* Your SCSS here. */
+}
