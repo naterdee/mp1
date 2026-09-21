@@ -71,10 +71,12 @@ function showSlides(n) {
     slides[i].style.display = "none";
   }
   for (i = 0; i < dots.length; i++) {
-    dots[i].className = dots[i].className.replace(" active", "");
+    dots[i].classList.remove('active');
   }
   slides[slideNum-1].style.display = "block";
-  dots[slideNum-1].className += " active";
+  if (dots[slideNum-1]) {
+    dots[slideNum-1].classList.add('active');
+  }
 }
 
 // Listeners
