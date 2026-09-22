@@ -204,8 +204,12 @@ var name = document.querySelector('.navbar a.name');
 var right = document.querySelector('.next');
 var left = document.querySelector('.prev');
 var modal = document.querySelector('.modal');
-var modalTrigger = document.querySelector('.modal-trigger');
+var modalTriggers = document.querySelectorAll('.modal-trigger');
 var modalClose = document.querySelector('.modal-close');
+var modalTitle = document.querySelector('#modal-title');
+var modalDescription = document.querySelector('#modal-description');
+var modalLink = document.querySelector('#modal-link');
+var activeModalTrigger;
 var slides = document.querySelectorAll('.mySlides');
 var dots = document.querySelectorAll('.dot');
 var slideNum = 1;
@@ -266,23 +270,32 @@ right.addEventListener('click', function () {
 left.addEventListener('click', function () {
   return showSlides(slideNum - 1);
 });
-modalTrigger.addEventListener('click', function () {
-  modal.hidden = false;
-  modalClose.focus();
+modalTriggers.forEach(function (trigger) {
+  trigger.addEventListener('click', function () {
+    activeModalTrigger = trigger;
+    modalTitle.textContent = trigger.dataset.title;
+    modalDescription.textContent = trigger.dataset.description;
+    modalLink.href = trigger.dataset.link;
+    modalLink.textContent = "".concat(trigger.dataset.linkText, " ");
+    modalLink.insertAdjacentHTML('beforeend', '<i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>');
+    modal.hidden = false;
+    modalClose.focus();
+  });
 });
 modalClose.addEventListener('click', function () {
   modal.hidden = true;
-  modalTrigger.focus();
+  activeModalTrigger.focus();
 });
 modal.addEventListener('click', function (event) {
   if (event.target === modal) {
     modal.hidden = true;
+    activeModalTrigger.focus();
   }
 });
 document.addEventListener('keydown', function (event) {
   if (event.key === 'Escape' && !modal.hidden) {
     modal.hidden = true;
-    modalTrigger.focus();
+    activeModalTrigger.focus();
   }
 });
 
@@ -338,12 +351,23 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var ___CSS_LOADER_URL_IMPORT_0___ = new URL(/* asset import */ __webpack_require__(/*! ../../../../../../../../assets/image.jpg */ "./assets/image.jpg"), __webpack_require__.b);
+var ___CSS_LOADER_URL_IMPORT_0___ = new URL(/* asset import */ __webpack_require__(/*! ../assets/image.jpg */ "./assets/image.jpg"), __webpack_require__.b);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 var ___CSS_LOADER_URL_REPLACEMENT_0___ = _node_modules_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2___default()(___CSS_LOADER_URL_IMPORT_0___);
 // Module
 ___CSS_LOADER_EXPORT___.push([module.id, `* {
   box-sizing: border-box;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 html {
@@ -375,6 +399,10 @@ body {
 
 .navbar a {
   text-decoration: none;
+}
+
+.navbar .name {
+  color: #2f80ed;
 }
 
 .navbar .buttons {
@@ -474,8 +502,8 @@ body {
 .top {
   padding: clamp(72px, 10vw, 132px) 24px;
   scroll-margin-top: 82px;
-  min-height: 100vh;
   padding-top: calc(\$nav-height + 72px);
+  padding-bottom: clamp(48px, 7vw, 88px);
   background: #66d6cb;
 }
 
@@ -593,6 +621,14 @@ body {
   scroll-margin-top: 82px;
   background: linear-gradient(rgba(23, 35, 45, 0.87), rgba(23, 35, 45, 0.87)), url(${___CSS_LOADER_URL_REPLACEMENT_0___}) center/cover fixed;
   color: white;
+}
+
+.showcase a {
+  color: white;
+}
+
+.showcase a:hover {
+  color: #8de3d5;
 }
 
 .showcase .eyebrow {
@@ -736,6 +772,17 @@ body {
   line-height: 1.6;
 }
 
+.modal-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: #167a78;
+  font-weight: 700;
+}
+
+.modal-link:hover {
+  color: #17232d;
+}
+
 .modal-close {
   position: absolute;
   top: 15px;
@@ -815,7 +862,7 @@ body {
     width: 36px;
     height: 36px;
   }
-}`, "",{"version":3,"sources":["webpack://./css/main.scss"],"names":[],"mappings":"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","sourcesContent":["$ink: #17232d;\n$paper: #f5f3ed;\n$teal: #8de3d5;\n$nav-height: 82px;\n$content-width: 1160px;\n\n@mixin section-space {\n  padding: clamp(72px, 10vw, 132px) 24px;\n  scroll-margin-top: $nav-height;\n}\n\n* { box-sizing: border-box; }\n\nhtml { scroll-behavior: smooth; }\n\nbody {\n  margin: 0;\n  background: $paper;\n  color: $ink;\n  font-family: Georgia, 'Times New Roman', serif;\n}\n\n.navbar {\n  position: fixed;\n  z-index: 10;\n  top: 0;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  width: 100%;\n  height: $nav-height;\n  padding: 0 24px;\n  overflow: hidden;\n  background: rgba(23, 35, 45, 0.96);\n  color: white;\n  transition: height 0.35s ease, padding 0.35s ease;\n}\n\n.navbar a { text-decoration: none; }\n\n.navbar .buttons {\n  position: relative;\n  padding: 12px 10px;\n  color: #dce7e8;\n  font-size: 16px;\n  transition: color 0.2s ease, font-size 0.35s ease;\n}\n\n.navbar .buttons:hover,\n.navbar .buttons.active { color: white; }\n\n.navbar .buttons::after {\n  position: absolute;\n  right: 10px;\n  bottom: 3px;\n  left: 10px;\n  height: 3px;\n  background: $teal;\n  content: '';\n  transform: scaleX(0);\n  transition: transform 0.2s ease;\n}\n\n.navbar .buttons.active::after { transform: scaleX(1); }\n\n.slideshow-container {\n  position: relative;\n  overflow: hidden;\n  max-width: 680px;\n  margin: 0 auto;\n  border: 10px solid rgba(255, 255, 255, 0.75);\n  box-shadow: 20px 20px 0 rgba(23, 35, 45, 0.16);\n}\n\n.prev, .next {\n  position: absolute;\n  top: 50%;\n  z-index: 1;\n  width: 46px;\n  height: 46px;\n  border: 0;\n  border-radius: 50%;\n  background: rgba(23, 35, 45, 0.82);\n  color: white;\n  cursor: pointer;\n  transform: translateY(-50%);\n}\n\n.projects {\n  @include section-space;\n  background: $paper;\n}\n\n.footer { padding: 28px 24px; background: $ink; color: #dce7e8; }\n\n.modal { position: fixed; z-index: 20; inset: 0; display: grid; place-items: center; padding: 24px; background: rgba(23, 35, 45, 0.75); }\n\n@keyframes reveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }\n\n@media (max-width: 800px) {\n  .navbar { padding: 0 14px; }\n}\n\n@media (max-width: 480px) {\n  .navbar .name { display: none; }\n}\n\n.top {\n  @include section-space;\n  min-height: 100vh;\n  padding-top: calc($nav-height + 72px);\n  background: #66d6cb;\n}\n\n.hero-inner { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); align-items: center; gap: clamp(32px, 7vw, 100px); }\n.eyebrow { margin: 0 0 14px; color: #167a78; font-family: Arial, sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }\n.hero-copy h1, .section-inner h2 { margin: 0 0 18px; font-size: clamp(42px, 7vw, 86px); line-height: 0.98; }\n.hero-summary { max-width: 430px; margin: 0; font-size: clamp(20px, 2.4vw, 28px); line-height: 1.35; }\n.mySlides { display: none; position: relative; width: 100%; }\n.mySlides img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }\n.caption { position: absolute; right: 0; bottom: 0; left: 0; padding: 18px; background: linear-gradient(transparent, rgba(0, 0, 0, 0.75)); color: white; font-size: 16px; }\n.prev { left: 16px; }\n.next { right: 16px; }\n.prev:hover, .next:hover { background: #167a78; }\n.projects { @include section-space; background: $paper; }\n.projects h2, .contact h2 { font-size: clamp(38px, 6vw, 70px); }\n.project-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 52px; }\n.project-card { min-height: 250px; padding: 28px; background: white; border-top: 5px solid $teal; box-shadow: 0 12px 28px rgba(23, 35, 45, 0.08); }\n.project-icon { color: #167a78; font-size: 30px; }\n.project-card h3 { margin: 34px 0 8px; font-size: 25px; }\n.project-card p { margin: 0; color: #59646b; font-size: 17px; line-height: 1.5; }\n.showcase { @include section-space; background: linear-gradient(rgba(23, 35, 45, 0.87), rgba(23, 35, 45, 0.87)), url('/assets/image.jpg') center / cover fixed; color: white; }\n.showcase .eyebrow { color: $teal; }\n.showcase h2 { max-width: 600px; }\n.showcase-inner { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 64px; }\n.showcase-inner > div > p:last-of-type { max-width: 520px; color: #d9e1e1; font-size: 18px; line-height: 1.6; }\n.showcase-video { width: 100%; border: 8px solid rgba(255, 255, 255, 0.8); }\n.modal-trigger { margin-top: 20px; padding: 14px 18px; border: 0; background: $teal; color: $ink; cursor: pointer; font: inherit; font-weight: 700; }\n.contact { @include section-space; background: #d8eee8; }\n.contact-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 42px; }\n.contact-link { display: flex; flex-direction: column; gap: 8px; padding: 24px; background: white; text-decoration: none; transition: transform 0.2s ease, box-shadow 0.2s ease; }\n.contact-link:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(23, 35, 45, 0.13); }\n.contact-link i { color: #167a78; font-size: 28px; }\n.contact-link span { font-size: 21px; font-weight: 700; }\n.contact-link small { color: #59646b; font-family: Arial, sans-serif; font-size: 14px; }\n.footer { padding: 28px 24px; background: $ink; color: #dce7e8; }\n.footer-inner { display: flex; align-items: center; justify-content: space-between; font-family: Arial, sans-serif; font-size: 13px; }\n.footer-inner a { display: grid; width: 36px; height: 36px; place-items: center; border: 1px solid #738187; border-radius: 50%; text-decoration: none; }\n.modal[hidden] { display: none; }\n.modal { position: fixed; z-index: 20; inset: 0; display: grid; place-items: center; padding: 24px; background: rgba(23, 35, 45, 0.75); }\n.modal-panel { position: relative; max-width: 520px; padding: 46px; background: $paper; box-shadow: 14px 14px 0 $teal; animation: reveal 0.25s ease-out; }\n.modal-panel h2 { margin: 0 0 15px; font-size: 42px; line-height: 1; }\n.modal-panel p:last-child { color: #59646b; font-size: 18px; line-height: 1.6; }\n.modal-close { position: absolute; top: 15px; right: 15px; border: 0; background: none; color: $ink; cursor: pointer; font-size: 22px; }\n@keyframes reveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }\n@media (max-width: 800px) { .navbar { padding: 0 14px; } .navbar .name { font-size: 25px; } .navbar .buttons { padding: 10px 7px; font-size: 13px; } .hero-inner, .showcase-inner { grid-template-columns: 1fr; } .hero-copy { text-align: center; } .hero-summary { margin: 0 auto; } .project-grid, .contact-links { grid-template-columns: 1fr; } }\n@media (max-width: 480px) { .navbar .name { display: none; } .rightnav { width: 100%; justify-content: space-between; } .navbar .buttons { font-size: 12px; } .top { padding-right: 14px; padding-left: 14px; } .slideshow-container { border-width: 5px; box-shadow: 8px 8px 0 rgba(23, 35, 45, 0.16); } .prev, .next { width: 36px; height: 36px; } }"],"sourceRoot":""}]);
+}`, "",{"version":3,"sources":["webpack://./css/main.scss"],"names":[],"mappings":"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","sourcesContent":["$ink: #17232d;\n$paper: #f5f3ed;\n$teal: #8de3d5;\n$nav-height: 82px;\n$content-width: 1160px;\n\n@mixin section-space {\n  padding: clamp(72px, 10vw, 132px) 24px;\n  scroll-margin-top: $nav-height;\n}\n\n* { box-sizing: border-box; }\n\n.sr-only {\n  position: absolute;\n  width: 1px;\n  height: 1px;\n  padding: 0;\n  overflow: hidden;\n  clip: rect(0, 0, 0, 0);\n  white-space: nowrap;\n  border: 0;\n}\n\nhtml { scroll-behavior: smooth; }\n\nbody {\n  margin: 0;\n  background: $paper;\n  color: $ink;\n  font-family: Georgia, 'Times New Roman', serif;\n}\n\n.navbar {\n  position: fixed;\n  z-index: 10;\n  top: 0;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  width: 100%;\n  height: $nav-height;\n  padding: 0 24px;\n  overflow: hidden;\n  background: rgba(23, 35, 45, 0.96);\n  color: white;\n  transition: height 0.35s ease, padding 0.35s ease;\n}\n\n.navbar a { text-decoration: none; }\n\n.navbar .name { color: #2f80ed; }\n\n.navbar .buttons {\n  position: relative;\n  padding: 12px 10px;\n  color: #dce7e8;\n  font-size: 16px;\n  transition: color 0.2s ease, font-size 0.35s ease;\n}\n\n.navbar .buttons:hover,\n.navbar .buttons.active { color: white; }\n\n.navbar .buttons::after {\n  position: absolute;\n  right: 10px;\n  bottom: 3px;\n  left: 10px;\n  height: 3px;\n  background: $teal;\n  content: '';\n  transform: scaleX(0);\n  transition: transform 0.2s ease;\n}\n\n.navbar .buttons.active::after { transform: scaleX(1); }\n\n.slideshow-container {\n  position: relative;\n  overflow: hidden;\n  max-width: 680px;\n  margin: 0 auto;\n  border: 10px solid rgba(255, 255, 255, 0.75);\n  box-shadow: 20px 20px 0 rgba(23, 35, 45, 0.16);\n}\n\n.prev, .next {\n  position: absolute;\n  top: 50%;\n  z-index: 1;\n  width: 46px;\n  height: 46px;\n  border: 0;\n  border-radius: 50%;\n  background: rgba(23, 35, 45, 0.82);\n  color: white;\n  cursor: pointer;\n  transform: translateY(-50%);\n}\n\n.projects {\n  @include section-space;\n  background: $paper;\n}\n\n.footer { padding: 28px 24px; background: $ink; color: #dce7e8; }\n\n.modal { position: fixed; z-index: 20; inset: 0; display: grid; place-items: center; padding: 24px; background: rgba(23, 35, 45, 0.75); }\n\n@keyframes reveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }\n\n@media (max-width: 800px) {\n  .navbar { padding: 0 14px; }\n}\n\n@media (max-width: 480px) {\n  .navbar .name { display: none; }\n}\n\n.top {\n  @include section-space;\n  padding-top: calc($nav-height + 72px);\n  padding-bottom: clamp(48px, 7vw, 88px);\n  background: #66d6cb;\n}\n\n.hero-inner { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); align-items: center; gap: clamp(32px, 7vw, 100px); }\n.eyebrow { margin: 0 0 14px; color: #167a78; font-family: Arial, sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }\n.hero-copy h1, .section-inner h2 { margin: 0 0 18px; font-size: clamp(42px, 7vw, 86px); line-height: 0.98; }\n.hero-summary { max-width: 430px; margin: 0; font-size: clamp(20px, 2.4vw, 28px); line-height: 1.35; }\n.mySlides { display: none; position: relative; width: 100%; }\n.mySlides img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }\n.caption { position: absolute; right: 0; bottom: 0; left: 0; padding: 18px; background: linear-gradient(transparent, rgba(0, 0, 0, 0.75)); color: white; font-size: 16px; }\n.prev { left: 16px; }\n.next { right: 16px; }\n.prev:hover, .next:hover { background: #167a78; }\n.projects { @include section-space; background: $paper; }\n.projects h2, .contact h2 { font-size: clamp(38px, 6vw, 70px); }\n.project-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 52px; }\n.project-card { min-height: 250px; padding: 28px; background: white; border-top: 5px solid $teal; box-shadow: 0 12px 28px rgba(23, 35, 45, 0.08); }\n.project-icon { color: #167a78; font-size: 30px; }\n.project-card h3 { margin: 34px 0 8px; font-size: 25px; }\n.project-card p { margin: 0; color: #59646b; font-size: 17px; line-height: 1.5; }\n.showcase { @include section-space; background: linear-gradient(rgba(23, 35, 45, 0.87), rgba(23, 35, 45, 0.87)), url('../assets/image.jpg') center / cover fixed; color: white; }\n.showcase a { color: white; }\n.showcase a:hover { color: $teal; }\n.showcase .eyebrow { color: $teal; }\n.showcase h2 { max-width: 600px; }\n.showcase-inner { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 64px; }\n.showcase-inner > div > p:last-of-type { max-width: 520px; color: #d9e1e1; font-size: 18px; line-height: 1.6; }\n.showcase-video { width: 100%; border: 8px solid rgba(255, 255, 255, 0.8); }\n.modal-trigger { margin-top: 20px; padding: 14px 18px; border: 0; background: $teal; color: $ink; cursor: pointer; font: inherit; font-weight: 700; }\n.contact { @include section-space; background: #d8eee8; }\n.contact-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 42px; }\n.contact-link { display: flex; flex-direction: column; gap: 8px; padding: 24px; background: white; text-decoration: none; transition: transform 0.2s ease, box-shadow 0.2s ease; }\n.contact-link:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(23, 35, 45, 0.13); }\n.contact-link i { color: #167a78; font-size: 28px; }\n.contact-link span { font-size: 21px; font-weight: 700; }\n.contact-link small { color: #59646b; font-family: Arial, sans-serif; font-size: 14px; }\n.footer { padding: 28px 24px; background: $ink; color: #dce7e8; }\n.footer-inner { display: flex; align-items: center; justify-content: space-between; font-family: Arial, sans-serif; font-size: 13px; }\n.footer-inner a { display: grid; width: 36px; height: 36px; place-items: center; border: 1px solid #738187; border-radius: 50%; text-decoration: none; }\n.modal[hidden] { display: none; }\n.modal { position: fixed; z-index: 20; inset: 0; display: grid; place-items: center; padding: 24px; background: rgba(23, 35, 45, 0.75); }\n.modal-panel { position: relative; max-width: 520px; padding: 46px; background: $paper; box-shadow: 14px 14px 0 $teal; animation: reveal 0.25s ease-out; }\n.modal-panel h2 { margin: 0 0 15px; font-size: 42px; line-height: 1; }\n.modal-panel p:last-child { color: #59646b; font-size: 18px; line-height: 1.6; }\n.modal-link { display: inline-block; margin-top: 10px; color: #167a78; font-weight: 700; }\n.modal-link:hover { color: $ink; }\n.modal-close { position: absolute; top: 15px; right: 15px; border: 0; background: none; color: $ink; cursor: pointer; font-size: 22px; }\n@keyframes reveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }\n@media (max-width: 800px) { .navbar { padding: 0 14px; } .navbar .name { font-size: 25px; } .navbar .buttons { padding: 10px 7px; font-size: 13px; } .hero-inner, .showcase-inner { grid-template-columns: 1fr; } .hero-copy { text-align: center; } .hero-summary { margin: 0 auto; } .project-grid, .contact-links { grid-template-columns: 1fr; } }\n@media (max-width: 480px) { .navbar .name { display: none; } .rightnav { width: 100%; justify-content: space-between; } .navbar .buttons { font-size: 12px; } .top { padding-right: 14px; padding-left: 14px; } .slideshow-container { border-width: 5px; box-shadow: 8px 8px 0 rgba(23, 35, 45, 0.16); } .prev, .next { width: 36px; height: 36px; } }"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -838,12 +885,11 @@ __webpack_require__.r(__webpack_exports__);
 // Imports
 
 var ___HTML_LOADER_IMPORT_0___ = new URL(/* asset import */ __webpack_require__(/*! ./css/main.scss */ "./css/main.scss?122f"), __webpack_require__.b);
-var ___HTML_LOADER_IMPORT_1___ = new URL(/* asset import */ __webpack_require__(/*! ../../../../../../../../assets/hydrant.jpeg */ "./assets/hydrant.jpeg"), __webpack_require__.b);
-var ___HTML_LOADER_IMPORT_2___ = new URL(/* asset import */ __webpack_require__(/*! ../../../../../../../../assets/plate.jpeg */ "./assets/plate.jpeg"), __webpack_require__.b);
-var ___HTML_LOADER_IMPORT_3___ = new URL(/* asset import */ __webpack_require__(/*! ../../../../../../../../assets/plate4.jpeg */ "./assets/plate4.jpeg"), __webpack_require__.b);
-var ___HTML_LOADER_IMPORT_4___ = new URL(/* asset import */ __webpack_require__(/*! ../../../../../../../../assets/image.jpg */ "./assets/image.jpg"), __webpack_require__.b);
-var ___HTML_LOADER_IMPORT_5___ = new URL(/* asset import */ __webpack_require__(/*! ../../../../../../../../assets/tetris.mov */ "./assets/tetris.mov"), __webpack_require__.b);
-var ___HTML_LOADER_IMPORT_6___ = new URL(/* asset import */ __webpack_require__(/*! ./index.js */ "./index.js?1442"), __webpack_require__.b);
+var ___HTML_LOADER_IMPORT_1___ = new URL(/* asset import */ __webpack_require__(/*! ./assets/boba.jpeg */ "./assets/boba.jpeg"), __webpack_require__.b);
+var ___HTML_LOADER_IMPORT_2___ = new URL(/* asset import */ __webpack_require__(/*! ./assets/travel.jpeg */ "./assets/travel.jpeg"), __webpack_require__.b);
+var ___HTML_LOADER_IMPORT_3___ = new URL(/* asset import */ __webpack_require__(/*! ./assets/cs.jpeg */ "./assets/cs.jpeg"), __webpack_require__.b);
+var ___HTML_LOADER_IMPORT_4___ = new URL(/* asset import */ __webpack_require__(/*! ./assets/tetris.mp4 */ "./assets/tetris.mp4"), __webpack_require__.b);
+var ___HTML_LOADER_IMPORT_5___ = new URL(/* asset import */ __webpack_require__(/*! ./index.js */ "./index.js?1442"), __webpack_require__.b);
 // Module
 var ___HTML_LOADER_REPLACEMENT_0___ = _node_modules_html_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_0___default()(___HTML_LOADER_IMPORT_0___);
 var ___HTML_LOADER_REPLACEMENT_1___ = _node_modules_html_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_0___default()(___HTML_LOADER_IMPORT_1___);
@@ -851,8 +897,7 @@ var ___HTML_LOADER_REPLACEMENT_2___ = _node_modules_html_loader_dist_runtime_get
 var ___HTML_LOADER_REPLACEMENT_3___ = _node_modules_html_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_0___default()(___HTML_LOADER_IMPORT_3___);
 var ___HTML_LOADER_REPLACEMENT_4___ = _node_modules_html_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_0___default()(___HTML_LOADER_IMPORT_4___);
 var ___HTML_LOADER_REPLACEMENT_5___ = _node_modules_html_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_0___default()(___HTML_LOADER_IMPORT_5___);
-var ___HTML_LOADER_REPLACEMENT_6___ = _node_modules_html_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_0___default()(___HTML_LOADER_IMPORT_6___);
-var code = "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"utf-8\">\n  <meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <link rel=\"stylesheet\" href=\"" + ___HTML_LOADER_REPLACEMENT_0___ + "\">\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css\">\n  <title>MP 1</title>\n</head>\n\n\n<body>\n<div class=\"navbar\">\n  <a class=\"name\" href=\"#top\">Nate Dower</a>\n  <div class=\"rightnav\">\n    <a class=\"buttons\" href=\"#top\">Home</a>\n    <a class=\"buttons\" href=\"#projects\">Projects</a>\n    <a class=\"buttons\" href=\"#showcase\">Showcase</a>\n    <a class=\"buttons\" href=\"#contact\">Contact</a>\n  </div>\n</div>\n\n<div id=\"top\" class=\"top\"> \n  <div class=\"section-inner hero-inner\">\n    <div class=\"hero-copy\">\n      <p class=\"eyebrow\">CS 409 / Interactive portfolio</p>\n      <h1>Ideas in motion.</h1>\n      <p class=\"hero-summary\">A small collection of work, experiments, and things worth building.</p>\n    </div>\n\n    <div class=\"slideshow-container\" aria-label=\"Project image carousel\">\n\n      <div class=\"mySlides fade\">\n        <img src=\"" + ___HTML_LOADER_REPLACEMENT_1___ + "\" alt=\"A red fire hydrant\">\n        <div class=\"caption\">Everyday objects, newly noticed.</div>\n      </div>\n\n      <div class=\"mySlides fade\">\n        <img src=\"" + ___HTML_LOADER_REPLACEMENT_2___ + "\" alt=\"A ceramic plate\">\n        <div class=\"caption\">Form, texture, and a little curiosity.</div>\n      </div>\n\n      <div class=\"mySlides fade\">\n        <img src=\"" + ___HTML_LOADER_REPLACEMENT_3___ + "\" alt=\"A second view of a ceramic plate\">\n        <div class=\"caption\">The details are the story.</div>\n      </div>\n\n      <button class=\"prev\" aria-label=\"Previous slide\"><i class=\"fa-solid fa-arrow-left\"></i></button>\n      <button class=\"next\" aria-label=\"Next slide\"><i class=\"fa-solid fa-arrow-right\"></i></button>\n    </div>\n  </div>\n</div>\n\n<div id=\"projects\" class=\"projects\"> \n  <div class=\"section-inner\">\n    <p class=\"eyebrow\">Selected work</p>\n    <h2>Built to be explored.</h2>\n    <div class=\"project-grid\">\n      <article class=\"project-card\">\n        <i class=\"fa-solid fa-layer-group project-icon\"></i>\n        <h3>Interfaces</h3>\n        <p>Thoughtful layouts that make information easier to find and use.</p>\n      </article>\n      <article class=\"project-card\">\n        <i class=\"fa-solid fa-wand-magic-sparkles project-icon\"></i>\n        <h3>Experiments</h3>\n        <p>Playful prototypes where interaction and visual design meet.</p>\n      </article>\n      <article class=\"project-card\">\n        <i class=\"fa-solid fa-code project-icon\"></i>\n        <h3>Development</h3>\n        <p>Clean, responsive frontends that hold up on every screen.</p>\n      </article>\n    </div>\n  </div>\n</div>\n\n<div id=\"showcase\" class=\"showcase\">\n  <div class=\"section-inner showcase-inner\">\n    <div>\n      <p class=\"eyebrow\">The moving image</p>\n      <h2>Make room for the unexpected.</h2>\n      <p>Some ideas are easier to understand when they move. This section uses a fixed background image and a native HTML5 video player as a small visual interlude.</p>\n      <button class=\"modal-trigger\" type=\"button\">Open project note <i class=\"fa-solid fa-arrow-up-right-from-square\"></i></button>\n    </div>\n    <video class=\"showcase-video\" controls preload=\"metadata\" poster=\"" + ___HTML_LOADER_REPLACEMENT_4___ + "\">\n      <source src=\"" + ___HTML_LOADER_REPLACEMENT_5___ + "\" type=\"video/quicktime\">\n      Your browser does not support HTML5 video.\n    </video>\n  </div>\n</div>\n<div id=\"contact\" class=\"contact\"> \n  \n  <div class=\"section-inner\">\n    <h2>Let's get in contact!</h2>\n    <div class=\"contact-links\">\n      <a class=\"contact-link\" href=\"mailto:naterdee6@gmail.com\"><i class=\"fa-solid fa-envelope\"></i><span>Email</span><small>naterdee6@gmail.com</small></a>\n      <a class=\"contact-link\" href=\"https://www.linkedin.com/in/ndower/\" target=\"_blank\" rel=\"noreferrer\"><i class=\"fa-brands fa-linkedin\"></i><span>LinkedIn</span><small>Nathanael Dower</small></a>\n      <a class=\"contact-link\" href=\"https://github.com/naterdee\" target=\"_blank\" rel=\"noreferrer\"><i class=\"fa-brands fa-github\"></i><span>GitHub</span><small>@naterdee</small></a>\n    </div>\n  \n\n<div class=\"modal\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"modal-title\" hidden>\n  <div class=\"modal-panel\">\n    <button class=\"modal-close\" type=\"button\" aria-label=\"Close project note\"><i class=\"fa-solid fa-xmark\"></i></button>\n    <p class=\"eyebrow\">A quick note</p>\n    <h2 id=\"modal-title\">Good work leaves a trace.</h2>\n    <p>Every project is an invitation to look closer, ask better questions, and make the next version a little more useful.</p>\n  </div>\n  <" + "script src=\"" + ___HTML_LOADER_REPLACEMENT_6___ + "\" defer><" + "/script>\n</body>\n</html>";
+var code = "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"utf-8\">\n  <meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <link rel=\"stylesheet\" href=\"" + ___HTML_LOADER_REPLACEMENT_0___ + "\">\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css\">\n  <title>MP 1</title>\n</head>\n\n\n<body>\n<div class=\"navbar\">\n  <a class=\"name\" href=\"#top\">Nate Dower</a>\n  <div class=\"rightnav\">\n    <a class=\"buttons\" href=\"#top\">Home</a>\n    <a class=\"buttons\" href=\"#projects\">Projects</a>\n    <a class=\"buttons\" href=\"#showcase\">Showcase</a>\n    <a class=\"buttons\" href=\"#contact\">Contact</a>\n  </div>\n</div>\n\n<div id=\"top\" class=\"top\"> \n  <div class=\"section-inner hero-inner\">\n    <div class=\"hero-copy\">\n      <p class=\"eyebrow\">CS 409 / Interactive portfolio</p>\n      <h1>Hi! I'm Nate</h1>\n      <p class=\"hero-summary\">Here's a bit about who I am and what I do.</p>\n    </div>\n\n    <div class=\"slideshow-container\" aria-label=\"Project image carousel\">\n\n      <div class=\"mySlides fade\">\n        <img src=\"" + ___HTML_LOADER_REPLACEMENT_1___ + "\" alt=\"A red fire hydrant\">\n        <div class=\"caption\">I'm a bit of a fiend for milk tea...</div>\n      </div>\n\n      <div class=\"mySlides fade\">\n        <img src=\"" + ___HTML_LOADER_REPLACEMENT_2___ + "\" alt=\"A ceramic plate\">\n        <div class=\"caption\">I love traveling, having gone to 30+ states and 10+ countries.</div>\n      </div>\n\n      <div class=\"mySlides fade\">\n        <img src=\"" + ___HTML_LOADER_REPLACEMENT_3___ + "\" alt=\"A second view of a ceramic plate\">\n        <div class=\"caption\">And I'm a Junior at UIUC studying Computer Science!</div>\n      </div>\n\n      <button class=\"prev\" aria-label=\"Previous slide\"><i class=\"fa-solid fa-arrow-left\"></i></button>\n      <button class=\"next\" aria-label=\"Next slide\"><i class=\"fa-solid fa-arrow-right\"></i></button>\n    </div>\n  </div>\n</div>\n\n<div id=\"projects\" class=\"projects\"> \n  <div class=\"section-inner\">\n    <h2>Recent Projects</h2>\n    <div class=\"project-grid\">\n      <article class=\"project-card\">\n        <i class=\"fa-solid fa-dungeon project-icon\" aria-hidden=\"true\"></i>\n        <h3>Dungeon Game</h3>\n        <button class=\"modal-trigger\" type=\"button\" data-title=\"Dungeon Game\" data-description=\"A text-based dungeon crawler with minigames, built collaboratively in Python. The project focused on clear game states, simple interactions, and teamwork.\" data-link=\"https://github.com/CS196Illinois/FA24-Group24\" data-link-text=\"View the project\"><span>View details</span> <i class=\"fa-solid fa-arrow-up-right-from-square\"></i></button>\n      </article>\n      <article class=\"project-card\">\n        <i class=\"fa-solid fa-brain project-icon\" aria-hidden=\"true\"></i>\n        <h3>Neural Networks</h3>\n        <button class=\"modal-trigger\" type=\"button\" data-title=\"Neural Networks\" data-description=\"Exploring the fundamentals of neural networks and their applications in machine learning in Python.\" data-link=\"https://github.com/naterdee/final-project361\" data-link-text=\"View the code\"><span>View details</span> <i class=\"fa-solid fa-arrow-up-right-from-square\"></i></button>\n      </article>\n      <article class=\"project-card\">\n        <i class=\"fa-solid fa-street-view project-icon\" aria-hidden=\"true\"></i>\n        <h3>Street View Images</h3>\n        <button class=\"modal-trigger\" type=\"button\" data-title=\"Street View Images\" data-description=\"A project exploring the use of KartaView images to create 2D street view render in Python.\" data-link=\"https://gitlab.com/jng8893/cs445-final-project\" data-link-text=\"View the code\"><span>View details</span> <i class=\"fa-solid fa-arrow-up-right-from-square\"></i></button>\n      </article>\n    </div>\n  </div>\n</div>\n\n<div id=\"showcase\" class=\"showcase\">\n  <div class=\"section-inner showcase-inner\">\n    <div>\n      <h2>Tetris in Haskell</h2>\n      <p>A fun project built with Codeworld to test my understanding of functional programming.</p>\n      <p><a href=\"https://code.world/haskell#Pc0izLcV8Wv3H5_eeFV5WkQ\" target=\"_blank\" rel=\"noreferrer\">Check it out here <i class=\"fa-solid fa-arrow-up-right-from-square\" aria-hidden=\"true\"></i><span class=\"sr-only\"> (opens in a new tab)</span></a></p>\n    </div>\n    <video class=\"showcase-video\" controls preload=\"metadata\">\n      <source src=\"" + ___HTML_LOADER_REPLACEMENT_4___ + "\" type=\"video/mp4\">\n      Your browser does not support HTML5 video.\n    </video>\n  </div>\n</div>\n<div id=\"contact\" class=\"contact\"> \n  \n  <div class=\"section-inner\">\n    <h2>Let's get in contact!</h2>\n    <div class=\"contact-links\">\n      <a class=\"contact-link\" href=\"mailto:naterdee6@gmail.com\"><i class=\"fa-solid fa-envelope\"></i><span>Email</span><small>naterdee6@gmail.com</small></a>\n      <a class=\"contact-link\" href=\"https://www.linkedin.com/in/ndower/\" target=\"_blank\" rel=\"noreferrer\"><i class=\"fa-brands fa-linkedin\"></i><span>LinkedIn</span><small>Nathanael Dower</small></a>\n      <a class=\"contact-link\" href=\"https://www.instagram.com/natesipstea/\" target=\"_blank\" rel=\"noreferrer\"><i class=\"fa-brands fa-instagram\"></i><span>Instagram</span><small>@natesipstea</small></a>\n    </div>\n  </div>\n</div>\n\n<div class=\"modal\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"modal-title\" hidden>\n  <div class=\"modal-panel\">\n    <button class=\"modal-close\" type=\"button\" aria-label=\"Close project note\"><i class=\"fa-solid fa-xmark\"></i></button>\n    <p class=\"eyebrow\">Project details</p>\n    <h2 id=\"modal-title\"></h2>\n    <p id=\"modal-description\"></p>\n    <a id=\"modal-link\" class=\"modal-link\" href=\"#\" target=\"_blank\" rel=\"noreferrer\"></a>\n  </div>\n</div>\n  <" + "script src=\"" + ___HTML_LOADER_REPLACEMENT_5___ + "\" defer><" + "/script>\n</body>\n</html>";
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (code);
 
@@ -1208,47 +1253,47 @@ module.exports = __webpack_require__.p + "1b1676ce0380ca5fc369.scss";
 
 /***/ },
 
-/***/ "./assets/hydrant.jpeg"
-/*!*****************************!*\
-  !*** ./assets/hydrant.jpeg ***!
-  \*****************************/
+/***/ "./assets/boba.jpeg"
+/*!**************************!*\
+  !*** ./assets/boba.jpeg ***!
+  \**************************/
 (module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
-module.exports = __webpack_require__.p + "dcf0bb9a37b4a4d227ec.jpeg";
+module.exports = __webpack_require__.p + "52584be3fbb4fcffe30d.jpeg";
 
 /***/ },
 
-/***/ "./assets/plate.jpeg"
+/***/ "./assets/cs.jpeg"
+/*!************************!*\
+  !*** ./assets/cs.jpeg ***!
+  \************************/
+(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+module.exports = __webpack_require__.p + "91167a54dfcbaa34d8db.jpeg";
+
+/***/ },
+
+/***/ "./assets/tetris.mp4"
 /*!***************************!*\
-  !*** ./assets/plate.jpeg ***!
+  !*** ./assets/tetris.mp4 ***!
   \***************************/
 (module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
-module.exports = __webpack_require__.p + "a4c75d3e32ebfc52b3d9.jpeg";
+module.exports = __webpack_require__.p + "18b056b26072c47ea508.mp4";
 
 /***/ },
 
-/***/ "./assets/plate4.jpeg"
+/***/ "./assets/travel.jpeg"
 /*!****************************!*\
-  !*** ./assets/plate4.jpeg ***!
+  !*** ./assets/travel.jpeg ***!
   \****************************/
 (module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
-module.exports = __webpack_require__.p + "dccce3eb7e01fa39ba00.jpeg";
-
-/***/ },
-
-/***/ "./assets/tetris.mov"
-/*!***************************!*\
-  !*** ./assets/tetris.mov ***!
-  \***************************/
-(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-module.exports = __webpack_require__.p + "a8dad6aaf53c0b9cb6aa.mov";
+module.exports = __webpack_require__.p + "ff21a0a063c65256a35b.jpeg";
 
 /***/ },
 
