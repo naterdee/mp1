@@ -1,11 +1,18 @@
 /* Your JS here. */
 
 const navButtons = document.querySelectorAll('.navbar a.buttons');
-const sections = document.querySelectorAll('.top, .projects, .contact');
+const sections = document.querySelectorAll('.top, .projects, .showcase, .contact');
 const navBar = document.querySelector('.navbar');
 const name = document.querySelector('.navbar a.name');
 const right = document.querySelector('.next');
 const left = document.querySelector('.prev');
+const modal = document.querySelector('.modal');
+const modalTriggers = document.querySelectorAll('.modal-trigger');
+const modalClose = document.querySelector('.modal-close');
+const modalTitle = document.querySelector('#modal-title');
+const modalDescription = document.querySelector('#modal-description');
+const modalLink = document.querySelector('#modal-link');
+let activeModalTrigger;
 
 const slides = document.querySelectorAll('.mySlides');
 const dots = document.querySelectorAll('.dot');
@@ -18,14 +25,35 @@ showSlides(slideNum);
 function scrollUpdate() {
   let currentSectionId = '';
 
+  if (window.scrollY > 80) {
+    navBar.style.height = "58px";
+    navButtons.forEach((button) => {
+      button.style.fontSize = "14px";
+      button.style.padding = "8px 10px";
+    });
+    name.style.fontSize = "25px";
+  } else {
+    navBar.style.height = "82px";
+    navButtons.forEach((button) => {
+      button.style.fontSize = "16px";
+      button.style.padding = "12px 10px";
+    });
+    name.style.fontSize = "34px";
+  }
+
+  const navBottom = navBar.getBoundingClientRect().bottom;
+
   sections.forEach((section) => {
-    // Get the distance of each section
     const sectionTop = section.getBoundingClientRect().top;
 
-    if (sectionTop <= 150) {
+    if (sectionTop <= navBottom + 4) {
       currentSectionId = section.getAttribute('id');
     }
   });
+
+  if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
+    currentSectionId = 'contact';
+  }
 
   // Sets button's active status
   navButtons.forEach((button) => {
@@ -35,26 +63,53 @@ function scrollUpdate() {
     }
   });
 
-    if (window.scrollY > 80) {
-        navBar.style.height = "30px";
-        navButtons.forEach((button) => {
-            button.style.fontSize = "15px";
-            button.style.padding = "5px";
-        });
-        name.style.fontSize = "20px";
-    } else {
-        navBar.style.height = "80px";
-        navButtons.forEach((button) => {
-            button.style.fontSize = "30px";
-            button.style.padding = "10px";
-        }); 
-        name.style.fontSize = "40px";
-    }
 }
+
+navButtons.forEach((button) => {
+  button.addEventListener('click', (event) => {
+    event.preventDefault();
+    const target = document.querySelector(button.getAttribute('href'));
+    const targetOffset = target.id === 'top' ? 82 : 58;
+    const targetPosition = target.getBoundingClientRect().top + window.scrollY - targetOffset;
+    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+  });
+});
 
 // Next/previous controls
 right.addEventListener('click', () => showSlides(slideNum + 1));
 left.addEventListener('click', () => showSlides(slideNum - 1));
+
+modalTriggers.forEach((trigger) => {
+  trigger.addEventListener('click', () => {
+    activeModalTrigger = trigger;
+    modalTitle.textContent = trigger.dataset.title;
+    modalDescription.textContent = trigger.dataset.description;
+    modalLink.href = trigger.dataset.link;
+    modalLink.textContent = `${trigger.dataset.linkText} `;
+    modalLink.insertAdjacentHTML('beforeend', '<i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>');
+    modal.hidden = false;
+    modalClose.focus();
+  });
+});
+
+modalClose.addEventListener('click', () => {
+  modal.hidden = true;
+  activeModalTrigger.focus();
+});
+
+modal.addEventListener('click', (event) => {
+  if (event.target === modal) {
+    modal.hidden = true;
+    activeModalTrigger.focus();
+  }
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && !modal.hidden) {
+    modal.hidden = true;
+    activeModalTrigger.focus();
+  }
+});
 
 
 // Thumbnail image controls
