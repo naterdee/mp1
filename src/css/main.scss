@@ -142,7 +142,7 @@ body {
 .project-icon { color: #167a78; font-size: 30px; }
 .project-card h3 { margin: 34px 0 8px; font-size: 25px; }
 .project-card p { margin: 0; color: #59646b; font-size: 17px; line-height: 1.5; }
-.showcase { @include section-space; background: linear-gradient(rgba(23, 35, 45, 0.87), rgba(23, 35, 45, 0.87)), url('../assets/image.jpg') center / cover fixed; color: white; }
+.showcase { @include section-space; background: linear-gradient(rgba(23, 35, 45, 0.87), rgba(23, 35, 45, 0.87)), url('../assets/codelines.jpg') center / cover fixed; color: white; }
 .showcase a { color: white; }
 .showcase a:hover { color: $teal; }
 .showcase .eyebrow { color: $teal; }
